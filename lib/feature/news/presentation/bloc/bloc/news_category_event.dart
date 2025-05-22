@@ -8,6 +8,10 @@ sealed class NewsCategoryEvent extends Equatable {
 }
 
 final class categoryListEvent extends NewsCategoryEvent {
-  final String? category;
-  categoryListEvent({required this.category});
+  final String category;
+
+  const categoryListEvent({required this.category});
+
+  @override
+  List<Object> get props => [category];
 }

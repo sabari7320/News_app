@@ -5,6 +5,7 @@ import 'package:news_app/core/di/injector.dart' as di;
 import 'package:news_app/core/services/notification/firebase_msg.dart';
 import 'package:news_app/core/services/notification/notification_screen.dart';
 import 'package:news_app/feature/auth/presentation/bloc/auth_bloc.dart';
+import 'package:news_app/feature/news/presentation/bloc/bloc/news_category_bloc.dart';
 import 'package:news_app/feature/splash/splash_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:news_app/firebase_options.dart';
@@ -25,7 +26,10 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MultiBlocProvider(
-      providers: [BlocProvider(create: (_) => di.sl<AuthBLoc>())],
+      providers: [
+        BlocProvider(create: (_) => di.sl<AuthBLoc>()),
+        BlocProvider(create: (_) => di.sl<NewsCategoryBloc>()),
+      ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
 

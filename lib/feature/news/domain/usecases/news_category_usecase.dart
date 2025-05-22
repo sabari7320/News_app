@@ -4,12 +4,19 @@ import 'package:news_app/feature/news/domain/entities/news_Category_entity.dart'
 import 'package:news_app/feature/news/domain/repositories/news_category_repo.dart';
 import 'package:fpdart/fpdart.dart';
 
-class NewsCategoryUsecase extends NoParams {
+class NewsCategoryUsecase
+    extends UsecasewithParams<List<NewsEntity>, CategoryParams> {
   final NewsCategoryRepo newsCategoryRepo;
 
   NewsCategoryUsecase({required this.newsCategoryRepo});
-
-  Future<Either<Failure, List<NewsEntity>>> call() {
-    return newsCategoryRepo.newsCategoryList();
+  @override
+  Future<Either<Failure, List<NewsEntity>>> call(CategoryParams params) async {
+    return await newsCategoryRepo.newsCategoryList(category: params.category);
   }
+}
+
+class CategoryParams {
+  String? category;
+
+  CategoryParams({required this.category});
 }
