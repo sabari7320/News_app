@@ -31,7 +31,7 @@ class _NewsListState extends State<NewsList> {
 
                   softWrap: true,
                   overflow: TextOverflow.ellipsis,
-                  style: TextStyle(color: Colors.black),
+                  //style: TextStyle(color: Colors.white),
                 ),
               ),
               ClipRRect(

@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:news_app/core/cubits/auth_cubits.dart';
+import 'package:news_app/core/cubits/theme_cubit.dart';
 import 'package:news_app/core/utils/string_utils.dart';
 import 'package:news_app/feature/news/presentation/bloc/bloc/news_category_bloc.dart';
 import 'package:news_app/feature/news/presentation/widgets/news_list.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class NewsScreen extends StatefulWidget {
   const NewsScreen({super.key});
@@ -29,7 +32,7 @@ class _NewsScreenState extends State<NewsScreen>
   @override
   void initState() {
     super.initState();
-
+    setlogin();
     // Initial fetch
     context.read<NewsCategoryBloc>().add(
       categoryListEvent(category: news_titles[0]),
@@ -53,6 +56,11 @@ class _NewsScreenState extends State<NewsScreen>
     });
   }
 
+  Future<void> setlogin() async {
+    final SharedPreferences _prefs = await SharedPreferences.getInstance();
+    _prefs.setBool('userlogin', true);
+  }
+
   @override
   void dispose() {
     _tabController.dispose();
@@ -66,6 +74,71 @@ class _NewsScreenState extends State<NewsScreen>
       child: Scaffold(
         appBar: AppBar(
           title: Text("News Times"),
+          actions: [
+            PopupMenuButton(
+              onSelected: (value) async {
+                if (value == 'theme') {
+                  context.read<ThemesCubit>().clickTheme();
+                } else if (value == 'logout') {
+                  final shouldLogout = await showDialog<bool>(
+                    context: context,
+                    builder:
+                        (context) => AlertDialog(
+                          title: const Text("Confirm Logout"),
+                          content: const Text(
+                            "Are you sure you want to logout?",
+                          ),
+                          actions: [
+                            TextButton(
+                              onPressed:
+                                  () => Navigator.of(
+                                    context,
+                                  ).pop(false), // cancel
+                              child: const Text("Cancel"),
+                            ),
+                            TextButton(
+                              onPressed:
+                                  () => Navigator.of(
+                                    context,
+                                  ).pop(true), // confirm
+                              child: const Text("Logout"),
+                            ),
+                          ],
+                        ),
+                  );
+
+                  if (shouldLogout == true) {
+                    print("caling lod]gouttt");
+                    context.read<AuthCubit>().logout();
+                  }
+                }
+                print("POp up menu item value is ${value}");
+              },
+              itemBuilder: (context) {
+                final isdark = Theme.of(context).brightness == Brightness.dark;
+                return [
+                  PopupMenuItem(
+                    value: "theme",
+                    child: ListTile(
+                      leading: Icon(
+                        isdark ? Icons.wb_sunny : Icons.nightlight_round,
+                      ),
+                      title: Text(isdark ? "Light Theme" : "Dark Theme"),
+                    ),
+                  ),
+
+                  PopupMenuItem(
+                    value: "logout",
+                    child: ListTile(
+                      leading: Icon(Icons.logout),
+
+                      title: Text("Logout"),
+                    ),
+                  ),
+                ];
+              },
+            ),
+          ],
           bottom: TabBar(
             controller: _tabController,
             isScrollable: true,

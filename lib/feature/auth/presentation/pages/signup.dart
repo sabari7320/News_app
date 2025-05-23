@@ -52,6 +52,7 @@ class _SignupPageState extends State<SignupPage> {
                         message: 'Signup successful!',
                         backgroundColor: Colors.green,
                       );
+
                       Navigator.pushReplacement(
                         context,
                         MaterialPageRoute(builder: (_) => NewsScreen()),

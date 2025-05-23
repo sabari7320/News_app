@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:news_app/core/config/app_theme.dart';
+import 'package:news_app/core/cubits/auth_cubits.dart';
+import 'package:news_app/core/cubits/theme_cubit.dart';
 import 'package:news_app/core/di/injector.dart' as di;
 import 'package:news_app/core/services/notification/firebase_msg.dart';
 import 'package:news_app/core/services/notification/notification_screen.dart';
@@ -27,14 +29,20 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
+        BlocProvider(create: (_) => AuthCubit()),
+        BlocProvider(create: (_) => ThemesCubit()),
         BlocProvider(create: (_) => di.sl<AuthBLoc>()),
         BlocProvider(create: (_) => di.sl<NewsCategoryBloc>()),
       ],
-      child: MaterialApp(
-        debugShowCheckedModeBanner: false,
+      child: BlocBuilder<ThemesCubit, ThemeData>(
+        builder: (context, themestate) {
+          return MaterialApp(
+            debugShowCheckedModeBanner: false,
 
-        theme: AppTheme.light,
-        home: SplashScreen(),
+            theme: themestate,
+            home: SplashScreen(),
+          );
+        },
       ),
     );
   }

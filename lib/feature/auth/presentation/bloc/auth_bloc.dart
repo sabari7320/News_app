@@ -6,6 +6,7 @@ import 'package:news_app/feature/auth/domain/entities/user_entity.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:news_app/feature/auth/domain/usecases/signIn_usecase.dart';
 import 'package:news_app/feature/auth/domain/usecases/signup_usecase.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 part 'auth_event.dart';
 part 'auth_state.dart';
 
@@ -50,6 +51,11 @@ class AuthBLoc extends Bloc<AuthEvent, AuthState> {
       (failure) => emit(AuthFailure(failure.message)),
       (user) => emit(AuthSuccess(user)),
     );
+    // res.fold((failure) => emit(AuthFailure(failure.message)), (user) async {
+    //   final SharedPreferences _prefs = await SharedPreferences.getInstance();
+    //   _prefs.setBool('userlogin', true);
+    //   emit(AuthSuccess(user));
+    // });
   }
 
   Future<void> _onsignIn(AuthLogin event, Emitter<AuthState> emit) async {
@@ -63,5 +69,10 @@ class AuthBLoc extends Bloc<AuthEvent, AuthState> {
       (failure) => emit(AuthFailure(failure.message)),
       (user) => emit(AuthSuccess(user)),
     );
+    // res.fold((failure) => emit(AuthFailure(failure.message)), (user) async {
+    //   final SharedPreferences _prefs = await SharedPreferences.getInstance();
+    //   _prefs.setBool('userlogin', true);
+    //   emit(AuthSuccess(user));
+    // });
   }
 }
